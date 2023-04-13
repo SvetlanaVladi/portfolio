@@ -1,5 +1,0 @@
-SELECT  * FROM Books
-ORDER BY price DESC
-UPDATE Books SET price = price + 250;
-ALTER TABLE Books ADD PRIMARY KEY(title)
-CREATE  UNIQUE INDEX title ON Books(title)
