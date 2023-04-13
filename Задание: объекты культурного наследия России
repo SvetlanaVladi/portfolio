@@ -1,0 +1,45 @@
+import matplotlib.pyplot as plt
+import geopandas as gpd
+import pandas as pd
+import descartes
+
+df = pd.read_csv("data-44-structure-4.csv.gz", usecols=['Регион', 'Объект'])
+df['Регион'] = df['Регион'].str.upper()
+#print(df.head())
+
+df = df.replace({
+    "ХАНТЫ-МАНСИЙСКИЙ АВТОНОМНЫЙ ОКРУГ - ЮГРА": "ХАНТЫ-МАНСИЙСКИЙ АВТОНОМНЫЙ ОКРУГ",
+    "РЕСПУБЛИКА АДЫГЕЯ (АДЫГЕЯ)": "РЕСПУБЛИКА АДЫГЕЯ",
+    "ЧУВАШСКАЯ РЕСПУБЛИКА - ЧУВАШИЯ": "ЧУВАШСКАЯ РЕСПУБЛИКА",
+    "РЕСПУБЛИКА МАРИЙ ЭЛ": "РЕСПУБЛИКА МАРИЙ-ЭЛ",
+    "РЕСПУБЛИКА СЕВЕРНАЯ ОСЕТИЯ - АЛАНИЯ": "РЕСПУБЛИКА СЕВЕРНАЯ ОСЕТИЯ",
+    "РЕСПУБЛИКА ТАТАРСТАН (ТАТАРСТАН)": "РЕСПУБЛИКА ТАТАРСТАН"
+})
+
+mem = df.groupby("Регион").count()
+#print(mem.index.values)
+
+print('В Татарстане', mem.loc['РЕСПУБЛИКА ТАТАРСТАН'][0], 'объектов культурного наследия.')
+print('В Алтайском крае', mem.loc['АЛТАЙСКИЙ КРАЙ'][0], 'объектов культурного наследия.')
+
+data = gpd.read_file("https://video.ittensive.com/python-advanced/russia.json")
+#print(data.head())
+data["NL_NAME_1"] = data['NL_NAME_1'].str.upper()
+
+data = pd.merge(left=data, right=mem,
+               left_on="NL_NAME_1", right_on="Регион", how="left")
+#print (data[data["Объект"].isnull()])
+
+data = data.to_crs({'init': 'epsg:3857'})
+
+fig = plt.figure(figsize=(20,16))
+area = plt.subplot(1, 1, 1)
+data.plot(ax=area, legend=True, column="Объект", cmap="Reds")
+area.set_xlim(2e6, 2e7) # Устанавливаем лимиты по оси х: отрезаем Чукотку с запада до Калининградской области.
+
+plt.title("Количество объектов культурного наследия по регионам", fontsize=10)
+
+for _,reg in data.iterrows():
+    area.annotate(int(reg["Объект"]),
+                  xy=(reg.geometry.centroid.x, reg.geometry.centroid.y), fontsize=7)
+plt.show()
