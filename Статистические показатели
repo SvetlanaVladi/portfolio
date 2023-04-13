@@ -1,0 +1,29 @@
+import statistics
+line = input( )
+months = [ ]
+while len(line):
+    months.append([int(i) for i in line.split( )])
+    line = input()
+if len(months) > 0:
+    month = 0
+    receipt = [0] * len(months[0])
+    while month<len(months):
+        manager=0
+        while manager < len(months[month]):
+            receipt[manager] += months[month][manager]
+            manager += 1
+        month += 1
+        hard = 0
+        receipt = sorted(receipt)
+        print(statistics.median(receipt))
+    if receipt[0] > receipt[1]:
+        if receipt[0] > receipt[2]:
+            print("Мэнеджер №1-ударник. Среднее значение продаж: " +str(int(receipt[0]/len(months))))
+        else:
+            print("Мэнеджер №3-ударник. Среднее значение продаж: "+str(int(receipt[2]/len(months))))
+    elif receipt[1] > receipt[2]:
+        print("Мэнеджер №2-ударник. Среднее значение продаж: "+str(int(receipt[1]/len(months))))
+    else:
+        print("Мэнеджер №3-ударник. Среднее значение продаж: "+str(int(receipt[2]/len(months))))
+else:
+    print("Нет данных")
