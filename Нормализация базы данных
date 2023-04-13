@@ -1,0 +1,16 @@
+CREATE TABLE `books` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `title` varchar(100) NOT NULL,
+ `author` varchar(100) NOT NULL,
+ `price` int(11) NOT NULL,
+ `genre_id` int(11) NOT NULL DEFAULT '0',
+ PRIMARY KEY (`id`),
+ KEY `title_author` (`title`,`author`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
+
+
+CREATE TABLE `genre` (
+ `genre_id` int(11) NOT NULL AUTO_INCREMENT,
+ `genre` varchar(100) NOT NULL DEFAULT '',
+ PRIMARY KEY (`genre_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1
