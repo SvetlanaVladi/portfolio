@@ -1,0 +1,12 @@
+import requests
+import json
+request_headers = {
+    "Content-Type": "application/json", # заголовок о данных которые отправляем
+    "Accept": "application/json;charset=UTF-8" #заголовок о данных которые хотим принимать
+}
+url = "https://geocode-maps.yandex.ru/1.x/?apikey=1b39da14-5686-4065-bd62-3fb990383ecb&format=json&geocode=Самара&result=1"
+# apikey - ключ разраба,  format=json - в каком формате получать, geocode=город Самара - какой город искать 
+response = requests.get(url, headers=request_headers)
+print("Код ответа:", response.status_code)
+resp = json.loads(response.text) 
+print(resp["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split(" ")[0])
