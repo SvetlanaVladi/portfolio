@@ -1,0 +1,10 @@
+N=int(input(  ))
+print(end = '\t') #  делаем верхний заголовок
+for i in range( 1, N + 1):
+    print("|", i, '\t', end='')
+print('|') # таблица
+for j in range(1, N + 1): # левый заголовок
+    print("|", j, '\t', end='')
+    for i in range(1, N + 1): # заполняем таблицу
+        print("|", str(i * j), '\t', end='')
+    print('|')
