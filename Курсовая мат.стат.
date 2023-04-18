@@ -1,0 +1,25 @@
+%matplotlib inline
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+import scipy.stats as st
+dataset = pd.read_csv('https://video.ittensive.com/math-stat/data-6048-2020-06-29.utf.csv', delimiter = ';')
+dataset.head()
+
+dataset.plot(x='Quarter', y='AveragePerCapita', style='o')
+plt.show()
+
+sen_=dataset['Seniors']
+chi_=dataset['Children']
+stats = st.f_oneway(sen_, chi_)
+print(stats)
+if stats[1]<0.5:
+    if st.ttest_ind(sen_, chi_)[1]<0.05/2:
+        print("различия есть")
+else:
+    print("Различий нет")
+
+dataset.describe()
+X=dataset[['ID', 'WorkingPopulation', 'Seniors', 'Children']]
+y=dataset['AveragePerCapita']
